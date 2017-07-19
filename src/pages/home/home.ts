@@ -18,8 +18,8 @@ export class HomePage {
 
   addItem(){
     let prompt = this.alertCtrl.create({
-      title: 'item Name',
-      message: "Enter a name for this new item you're so keen on adding",
+      title: 'Item Name',
+      message: "Enter a name for this new item.",
       inputs: [
         {
           name: 'title',
