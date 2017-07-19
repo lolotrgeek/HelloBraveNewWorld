@@ -18,6 +18,7 @@ import { Firebase } from '@ionic-native/firebase';
 import { AngularFireModule } from 'angularfire2'; // DEV: remove for mobile deployment
 import { AngularFireDatabaseModule } from 'angularfire2/database'; // DEV: remove for mobile deployment
 
+// Firebase Web Config:
 export const firebaseConfig = {  
     apiKey: "AIzaSyALtPpAv2e7ZiH9zi74KuawgWUSj80d-58",
     authDomain: "hellobravenewworld-b6b1e.firebaseapp.com",
