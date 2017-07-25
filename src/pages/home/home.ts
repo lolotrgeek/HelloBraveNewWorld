@@ -9,7 +9,7 @@ import {AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database
 })
 export class HomePage {
 
-  items: FirebaseListObservable<any>; // DEV: remove for mobile deployment
+  items: FirebaseListObservable<any>; 
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, af: AngularFireDatabase) {
      this.items = af.list('/items');
