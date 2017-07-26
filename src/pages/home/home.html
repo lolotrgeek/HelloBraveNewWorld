@@ -5,7 +5,7 @@
 </ion-header>
 
 <ion-content padding>
-  <h2>Hello Brave New World!</h2>
+  <h3>Hello {{displayName}}</h3>  
   <ion-list-header>Firebase Items</ion-list-header> 
   <ion-list>
     <ion-item *ngFor="let item of items | async" (click)="showOptions(item.$key, item.title)">
@@ -18,5 +18,7 @@
       <ion-icon name="add"></ion-icon>
     </button>
   </ion-buttons>
+
+  <button ion-button outline (click)="signOut()">Logout</button>
 
 </ion-content>

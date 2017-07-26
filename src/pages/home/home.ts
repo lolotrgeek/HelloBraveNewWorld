@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, ActionSheetController } from 'ionic-angular';
+import { NavController, AlertController, ActionSheetController, ToastController } from 'ionic-angular';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
 
-import {AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database'; // DEV: remove for mobile deployment
+import { LoginPage } from '../login/login';
 
 @Component({
   selector: 'page-home',
@@ -9,14 +11,52 @@ import {AngularFireDatabase, FirebaseListObservable} from 'angularfire2/database
 })
 export class HomePage {
 
+  displayName;
   items: FirebaseListObservable<any>; 
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, af: AngularFireDatabase) {
-     this.items = af.list('/items');
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, private toast:ToastController, afDB: AngularFireDatabase, private afAuth: AngularFireAuth) {
+    
+    // Construct Display Name
+    afAuth.authState.subscribe(user => {
+      if (!user) {
+        this.displayName = null;        
+        return;
+      }
+      this.displayName = user.displayName;      
+    });
+    // Construct list from Firebase DB (afDB)
+    this.items = afDB.list('/items');
 
   }
 
-  addItem(){
+  ionViewWillLoad () {
+    // Show User Data only if they are logged in
+    this.afAuth.authState.subscribe(user => {
+      if (user && user.email && user.uid) {
+        // display welcome toast
+        this.toast.create({
+          message: `Welcome ${user.email}`,
+          duration: 3000
+        }).present();
+      }
+      else {
+        // otherwise go to login page
+        this.navCtrl.setRoot(LoginPage);
+    }
+  }
+  );
+  }
+  // Signout
+  signOut() {
+    this.afAuth.auth.signOut();
+    this.navCtrl.setRoot(LoginPage);
+      this.toast.create({
+        message: `Logged Out`,
+        duration: 3000
+      }).present();
+  }
+
+  addItem() {
     let prompt = this.alertCtrl.create({
       title: 'Item Name',
       message: "Enter a name for this new item.",

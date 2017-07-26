@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { User } from '../../models/user';
+import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { AngularFireAuth }  from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
+import { User } from '../../models/user';
 import { TabsPage } from '../tabs/tabs';
+import { RegisterPage } from '../register/register';
 
 /**
  * Generated class for the LoginPage page.
@@ -17,12 +19,22 @@ import { TabsPage } from '../tabs/tabs';
 })
 export class LoginPage {
 
+  // Load the User Model
   user = {} as User;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private afAuth: AngularFireAuth) {
+  constructor(public navCtrl: NavController, private toast:ToastController, public navParams: NavParams, private afAuth: AngularFireAuth) {
   }
 
-  // FIREBASE Authentication
+  // If a user is logged in redirect to main page 
+  ionViewWillLoad () {
+    this.afAuth.authState.subscribe(data => {
+      if (data && data.uid) {
+        this.navCtrl.setRoot(TabsPage)
+      } 
+    });
+  }
+
+  // Try to login with info from user model, if successful redirect to TabsPage
   async login(user:User) {    
     try {
       const result = this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password);
@@ -31,17 +43,51 @@ export class LoginPage {
         this.navCtrl.setRoot(TabsPage)
       }
     }
-      catch (e) {
+    catch (e) {
       console.error(e);
+        this.toast.create({
+          message: e.message,
+          duration: 3000
+        }).present();
+      }
+    }
+  
+  // Try to login with info from google, if successful redirect to TabsPage
+  async googlelogin() {
+    try {
+      const result = this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+      console.log(result);
+      if (result) {
+        this.navCtrl.setRoot(TabsPage)
+      }
+    }
+    catch (e) {
+      console.error(e);
+        this.toast.create({
+          message: e.message,
+          duration: 3000
+        }).present();
+    }
+  }
+  
+  // Register
+  async register(user:User){
+    
+    try {
+      const result = await this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password);
+      console.log(result);
+      if (result) {
+        this.navCtrl.setRoot(TabsPage)
+      }
+    }
+    catch (e) {
+      console.error(e);
+        this.toast.create({
+          message: e.message,
+          duration: 3000
+        }).present();
     }
   }
 
-  register() {
-    this.navCtrl.push('RegisterPage');
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
-  }
 
 }

@@ -16,7 +16,7 @@
 <ion-content padding>
   <ion-item>
     <ion-label floating>Email</ion-label>
-    <ion-input type="text" [(ngModel)]="user.email"></ion-input>
+    <ion-input type="text" [(ngModel)]="user.email" required #email></ion-input>
   </ion-item>
 
   <ion-item>
@@ -25,5 +25,6 @@
   </ion-item>
 
   <button ion-button (click) = "login(user)">Login </button>
-  <button ion-button (click) = "register()">Register </button>
+  <button ion-button (click) = "register(user)">Register </button>
+  <button ion-button outline (click)="googlelogin()">Google Login</button>  
 </ion-content>
