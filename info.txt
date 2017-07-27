@@ -1,3 +1,9 @@
+Node version: v6.10.2
+
+Cordova version: 7.0.1
+
+Config.xml file: 
+
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="io.ionic.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>HBNW</name>
@@ -96,3 +102,16 @@
         <variable name="APP_NAME" value="hellobravenewworld" />
     </plugin>
 </widget>
+
+
+Plugins: 
+
+cordova-plugin-buildinfo,cordova-plugin-console,cordova-plugin-device,cordova-plugin-facebook4,cordova-plugin-firebase,cordova-plugin-googleplus,cordova-plugin-splashscreen,cordova-plugin-statusbar,cordova-plugin-whitelist,ionic-plugin-keyboard
+
+Error retrieving Android platform information: 
+Android SDK is not set up properly. Make sure that the Android SDK 'tools' and 'platform-tools' directories are in the PATH variable. 
+
+Error: cmd: Command failed with exit code 1 Error output:
+'android' is not recognized as an internal or external command,
+operable program or batch file.
+
