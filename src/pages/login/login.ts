@@ -52,7 +52,7 @@ export class LoginPage {
       }
     }
   
-  // Try to login with info from google, if successful redirect to TabsPage
+  // google login
   async googlelogin() {
     try {
       const result = this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
@@ -69,6 +69,24 @@ export class LoginPage {
         }).present();
     }
   }
+  // facebook login
+  async facebooklogin() {
+    try {
+    const result = this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
+      console.log(result);
+      if (result) {
+        this.navCtrl.setRoot(TabsPage)
+      }
+    }
+    catch (e) {
+      console.error(e);
+        this.toast.create({
+          message: e.message,
+          duration: 3000
+        }).present();
+    }
+  }
+  
   
   // Register
   async register(user:User){
@@ -88,6 +106,4 @@ export class LoginPage {
         }).present();
     }
   }
-
-
 }

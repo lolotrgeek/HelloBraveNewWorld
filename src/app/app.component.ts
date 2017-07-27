@@ -41,7 +41,7 @@ export class MyApp {
 
       }
 
-      else {
+      if (platform.is('browser')) {
           console.log ('PLATFORM: Browser')
       }
     });
