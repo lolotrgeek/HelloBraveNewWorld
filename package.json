@@ -1,5 +1,5 @@
 {
-    "name": "HelloBraveNewWorld",
+    "name": "hellobravenewworld",
     "version": "0.0.1",
     "author": "lolotrgeek",
     "homepage": "https://github.com/lolotrgeek/HelloBraveNewWorld",
@@ -46,14 +46,13 @@
         "promise-polyfill": "^6.0.2",
         "rxjs": "5.4.0",
         "sw-toolbox": "3.6.0",
-        "zone.js": "0.8.12"
+        "zone.js": "0.8.12",
+        "ionic": "^3.6.0"
     },
     "devDependencies": {
         "@ionic/app-scripts": "^2.0.2",
-        "@ionic/cli-plugin-cordova": "1.4.1",
-        "@ionic/cli-plugin-ionic-angular": "1.3.2",
-        "angularfire2": "^4.0.0-rc.1",
-        "firebase": "^4.1.3",
+        "@ionic/cli-plugin-cordova": "^1.5.0",
+        "@ionic/cli-plugin-ionic-angular": "^1.4.0",
         "typescript": "2.3.4"
     },
     "description": "A new skeleton app.",
