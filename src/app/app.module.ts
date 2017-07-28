@@ -16,6 +16,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 // Firebase Native
 import { Firebase } from '@ionic-native/firebase';
+import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links';
 
 // Firebase Web
 import { firebaseConfig } from './app.firebase.config';
@@ -58,6 +59,7 @@ import { Facebook } from '@ionic-native/facebook';
   ],
   providers: [
     Firebase,
+    FirebaseDynamicLinks,
     StatusBar,
     SplashScreen,
     GooglePlus,

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, ActionSheetController, ToastController } from 'ionic-angular';
+import { NavController, AlertController, ActionSheetController, ToastController} from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links';
 
 import { LoginPage } from '../login/login';
 
@@ -14,7 +15,7 @@ export class HomePage {
   displayName;
   items: FirebaseListObservable<any>; 
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, private toast:ToastController, afDB: AngularFireDatabase, private afAuth: AngularFireAuth) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, private toast:ToastController, afDB: AngularFireDatabase, private afAuth: AngularFireAuth, private firebaseDynamicLinks: FirebaseDynamicLinks) {
     
     // Construct Display Name
     afAuth.authState.subscribe(user => {
@@ -22,7 +23,8 @@ export class HomePage {
         this.displayName = null;        
         return;
       }
-      this.displayName = user.displayName;      
+      this.displayName = user.displayName;
+            
     });
     // Construct list from Firebase DB (afDB)
     this.items = afDB.list('/items');
@@ -30,21 +32,12 @@ export class HomePage {
   }
 
   ionViewWillLoad () {
-    // Show User Data only if they are logged in
+    // Return to login page if user is not logged in
     this.afAuth.authState.subscribe(user => {
-      if (user && user.email && user.uid) {
-        // display welcome toast
-        this.toast.create({
-          message: `Welcome ${user.email}`,
-          duration: 3000
-        }).present();
-      }
-      else {
-        // otherwise go to login page
+      if (!user ) {
         this.navCtrl.setRoot(LoginPage);
     }
-  }
-  );
+  });
   }
   // Signout
   signOut() {
@@ -55,7 +48,26 @@ export class HomePage {
         duration: 3000
       }).present();
   }
+    
+  // Example Deep Link
+  deepLink () {
+    const options = {
+      title: 'My Title',
+      message: 'My message',
+      deepLink: 'http://example.com/',
+      callToActionText: 'Message on button'
+    }
+    this.firebaseDynamicLinks.sendInvitation(options)
+      .then((res: any) => console.log(res))
+      .catch((error: any) => console.error(error));
 
+    this.firebaseDynamicLinks.onDynamicLink()
+      .then((res: any) => console.log(res)) 
+      //Handle the logic here after opening the app with the Dynamic link
+      .catch((error:any) => console.log(error));
+  } 
+
+  // Add item to DB
   addItem() {
     let prompt = this.alertCtrl.create({
       title: 'Item Name',
@@ -85,7 +97,7 @@ export class HomePage {
     });
     prompt.present();
   }
-
+  // Show options modal
   showOptions(itemId, itemTitle) {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'What do you want to do?',
@@ -112,11 +124,12 @@ export class HomePage {
     });
     actionSheet.present();
   }
-
+  // remove item from DB
   removeItem(itemId: string){
   this.items.remove(itemId);
   }
 
+  // Update item in DB
   updateItem(itemId, itemTitle){
     let prompt = this.alertCtrl.create({
       title: 'item Name',

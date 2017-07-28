@@ -24,8 +24,16 @@
     <ion-input type="password" [(ngModel)]="user.password"></ion-input>
   </ion-item>
 
-  <button ion-button full (click) = "login(user)">Login </button>
-  <button ion-button full color="light" (click) = "register(user)">Register </button>
-  <button ion-button full (click)="googlelogin()">Google Login</button>
-  <button ion-button full (click)="facebooklogin()">Facebook Login</button>  
+  <p>
+    <button ion-button full (click) = "login(user)">Login </button>
+  </p>
+  <p>
+    <button ion-button full color="light" (click) = "register(user)">Signup</button>
+  </p>
+  <p>
+    <button ion-button full (click)="googlelogin()">Google Login</button>
+  </p>
+  <p>
+    <button ion-button full (click)="facebooklogin()">Facebook Login</button>  
+  </p>
 </ion-content>
