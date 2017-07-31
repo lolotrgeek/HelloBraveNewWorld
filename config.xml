@@ -77,9 +77,9 @@
         <splash height="960" src="resources/ios/splash/Default@2x~iphone.png" width="640" />
         <splash height="480" src="resources/ios/splash/Default~iphone.png" width="320" />
     </platform>
-    <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^4.4.0" />
     <plugin name="cordova-plugin-admob-free" spec="^0.9.0" />
+    <plugin name="cordova-plugin-buildinfo" spec="^1.1.0" />
     <plugin name="cordova-plugin-console" spec="^1.0.7" />
     <plugin name="cordova-plugin-device" spec="^1.1.6" />
     <plugin name="cordova-plugin-facebook4" spec="^1.9.1">
@@ -87,6 +87,11 @@
         <variable name="APP_NAME" value="hellobravenewworld" />
     </plugin>
     <plugin name="cordova-plugin-firebase" spec="^0.1.22" />
+    <plugin name="cordova-plugin-firebase-dynamiclinks" spec="^0.10.1">
+        <variable name="APP_DOMAIN" value="https://hellobravenewworld-b6b1e.firebaseapp.com/" />
+        <variable name="APP_PATH" value="/" />
+        <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.128224322715-ho1ahuid2umfrvorj1ijef94k7q5uosd" />
+    </plugin>
     <plugin name="cordova-plugin-googleplus" spec="^5.1.1">
         <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.128224322715-ho1ahuid2umfrvorj1ijef94k7q5uosd" />
     </plugin>
@@ -94,9 +99,4 @@
     <plugin name="cordova-plugin-statusbar" spec="^2.2.3" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
-    <plugin name="cordova-plugin-firebase-dynamiclinks" spec="^0.10.1">
-        <variable name="APP_DOMAIN" value="https://hellobravenewworld-b6b1e.firebaseapp.com/" />
-        <variable name="APP_PATH" value="/" />
-        <variable name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.128224322715-ho1ahuid2umfrvorj1ijef94k7q5uosd" />
-    </plugin>
 </widget>

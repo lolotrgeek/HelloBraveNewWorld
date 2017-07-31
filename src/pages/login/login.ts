@@ -4,7 +4,7 @@ import { AngularFireAuth }  from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { User } from '../../models/user';
 import { TabsPage } from '../tabs/tabs';
-import { RegisterPage } from '../register/register';
+//import { RegisterPage } from '../register/register';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { Facebook } from '@ionic-native/facebook';
 
@@ -21,30 +21,29 @@ import { Facebook } from '@ionic-native/facebook';
 })
 export class LoginPage {
 
-  // Load the User Model
+  // MODEL: user
   user = {} as User;
 
   constructor(public navCtrl: NavController, private toast:ToastController, private platform: Platform, public navParams: NavParams, private afAuth: AngularFireAuth, private googlePlus: GooglePlus, private fb: Facebook) {
+    console.log ('login loaded');
+  
   }
 
-  // If a user is logged in redirect to main page 
-  ionViewWillLoad () {
-    this.afAuth.authState.subscribe(data => {
-      if (data && data.uid) {
-        this.navCtrl.setRoot(TabsPage)
-      } 
-    });
-  }
-
-  // Try to login with info from user model, if successful redirect to TabsPage
+  // LOGIN: Model
   async login(user:User) {    
     try {
       const result = this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password);
+
       console.log(result);
+
       if (result) {
-        this.navCtrl.setRoot(TabsPage)
+          this.afAuth.authState.subscribe(data => {
+            if (data && data.uid) {
+                this.navCtrl.setRoot(TabsPage)
+            } 
+          });
+        }
       }
-    }
     catch (e) {
       console.error(e);
         this.toast.create({
@@ -54,7 +53,7 @@ export class LoginPage {
       }
     }
   
-  // google login
+  //LOGIN: Google
   async googlelogin() {
     try {
       //Native
@@ -66,9 +65,15 @@ export class LoginPage {
       } else {
       // Web
         const result = this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        
         console.log(result);
+        
         if (result) {
-          this.navCtrl.setRoot(TabsPage)
+          this.afAuth.authState.subscribe(data => {
+            if (data && data.uid) {
+                this.navCtrl.setRoot(TabsPage)
+            } 
+          });
         }
       }
     }
@@ -80,7 +85,7 @@ export class LoginPage {
         }).present();
     }
   }
-  // facebook login
+  // LOGIN: Facebook
   async facebooklogin() {
     try {
       // Native
@@ -89,16 +94,26 @@ export class LoginPage {
           const facebookCredential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
           const result = firebase.auth().signInWithCredential(facebookCredential);
           if (result) {
-            this.navCtrl.setRoot(TabsPage)
+            this.afAuth.authState.subscribe(data => {
+              if (data && data.uid) {
+                  this.navCtrl.setRoot(TabsPage)
+              } 
+            });
           }
         })
 
       } else {
       // Web
       const result = this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
+      
         console.log(result);
+
         if (result) {
-          this.navCtrl.setRoot(TabsPage)
+          this.afAuth.authState.subscribe(data => {
+            if (data && data.uid) {
+                this.navCtrl.setRoot(TabsPage)
+            } 
+          });
         }
       }
     }
@@ -110,15 +125,18 @@ export class LoginPage {
         }).present();
     }
   }
-  
-  
+
   // Register
   async register(user:User){    
     try {
       const result = await this.afAuth.auth.createUserWithEmailAndPassword(user.email, user.password);
       console.log(result);
       if (result) {
-        this.navCtrl.setRoot(TabsPage)
+          this.afAuth.authState.subscribe(data => {
+            if (data && data.uid) {
+                this.navCtrl.setRoot(TabsPage)
+            } 
+          });
       }
     }
     catch (e) {

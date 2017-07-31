@@ -46,7 +46,7 @@
         "cordova-plugin-statusbar": "^2.2.3",
         "cordova-plugin-whitelist": "^1.3.2",
         "cordova-promise-polyfill": "0.0.2",
-        "firebase": "^4.1.5",
+        "firebase": "^4.2.0",
         "ionic": "^3.6.0",
         "ionic-angular": "3.5.3",
         "ionic-plugin-keyboard": "^2.2.1",
@@ -84,10 +84,10 @@
                 "APP_DOMAIN": "https://hellobravenewworld-b6b1e.firebaseapp.com/",
                 "APP_PATH": "/",
                 "REVERSED_CLIENT_ID": "com.googleusercontent.apps.128224322715-ho1ahuid2umfrvorj1ijef94k7q5uosd"
-            }
+            },
+            "cordova-plugin-buildinfo": {}
         },
         "platforms": [
-            "android",
             "ios"
         ]
     }

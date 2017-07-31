@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ToastController } from 'ionic-angular';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController} from 'ionic-angular';
 
 import { AboutPage } from '../about/about';
 import { ContactPage } from '../contact/contact';
@@ -19,8 +18,13 @@ export class TabsPage {
   tab2Root = AboutPage;
   tab3Root = ContactPage;
 
-  constructor(private afAuth:AngularFireAuth, private toast:ToastController, public navCtrl: NavController) {
-
+  constructor(private afAuth:AngularFireAuth, public navCtrl: NavController) {
+    // Show login page if user is not logged in
+    this.afAuth.authState.subscribe(user => {
+      if (!user ) {
+        this.navCtrl.setRoot(LoginPage);
+    }
+  });
   }
 
 }

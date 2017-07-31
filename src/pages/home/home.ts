@@ -12,32 +12,33 @@ import { LoginPage } from '../login/login';
 })
 export class HomePage {
 
+  data;
   displayName;
   items: FirebaseListObservable<any>; 
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, private toast:ToastController, afDB: AngularFireDatabase, private afAuth: AngularFireAuth, private firebaseDynamicLinks: FirebaseDynamicLinks) {
-    
-    // Construct Display Name
+
     afAuth.authState.subscribe(user => {
-      if (!user) {
-        this.displayName = null;        
+      //UI: Display nothing if there is no user
+      if (!user) {        
+        this.data = null;
+        return;
+      }
+      //UI: Display user name
+      if (!user.displayName) {
+        this.displayName = null;
         return;
       }
       this.displayName = user.displayName;
             
     });
-    // Construct list from Firebase DB (afDB)
+    //DB: Construct list from Firebase DB (afDB)
     this.items = afDB.list('/items');
 
   }
 
   ionViewWillLoad () {
-    // Return to login page if user is not logged in
-    this.afAuth.authState.subscribe(user => {
-      if (!user ) {
-        this.navCtrl.setRoot(LoginPage);
-    }
-  });
+    console.log('home loaded')
   }
   // Signout
   signOut() {
@@ -49,7 +50,7 @@ export class HomePage {
       }).present();
   }
     
-  // Example Deep Link
+  //DEEP LINK: Example
   deepLink () {
     const options = {
       title: 'My Title',
@@ -67,7 +68,7 @@ export class HomePage {
       .catch((error:any) => console.log(error));
   } 
 
-  // Add item to DB
+  //DB: Add item
   addItem() {
     let prompt = this.alertCtrl.create({
       title: 'Item Name',
@@ -97,7 +98,7 @@ export class HomePage {
     });
     prompt.present();
   }
-  // Show options modal
+  //DB: Show options modal
   showOptions(itemId, itemTitle) {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'What do you want to do?',
@@ -124,7 +125,7 @@ export class HomePage {
     });
     actionSheet.present();
   }
-  // remove item from DB
+  //DB: remove item
   removeItem(itemId: string){
   this.items.remove(itemId);
   }

@@ -5,18 +5,18 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Firebase } from '@ionic-native/firebase'; // native
 import { AngularFireAuth } from 'angularfire2/auth';
 import { LoginPage } from '../pages/login/login';
+import { TabsPage } from '../pages/tabs/tabs';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = LoginPage;
+  rootPage:any = TabsPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private firebase: Firebase, public afAuth: AngularFireAuth) {
-    this.afAuth.authState.subscribe(data => {
-
+    this.afAuth.authState.subscribe(user => {
+      
     });
-
     platform.ready().then(() => {
       
       // Okay, so the platform is ready and our plugins are available.
