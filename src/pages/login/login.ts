@@ -4,7 +4,6 @@ import { AngularFireAuth }  from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { User } from '../../models/user';
 import { TabsPage } from '../tabs/tabs';
-//import { RegisterPage } from '../register/register';
 import { GooglePlus } from '@ionic-native/google-plus';
 import { googleplusConfig } from '../../app/app.googleplus.config';
 import { Facebook } from '@ionic-native/facebook';

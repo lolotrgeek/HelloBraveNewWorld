@@ -4,8 +4,6 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 import { AngularFireAuth } from 'angularfire2/auth';
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links';
 
-import { LoginPage } from '../login/login';
-
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
@@ -26,9 +24,7 @@ export class HomePage {
     public loadingCtrl: LoadingController
   ) {
 
-    
     afAuth.authState.subscribe(user => {
-
       // UI: Display user name
       if (!user.displayName) {
         this.displayName = null;
@@ -44,12 +40,11 @@ export class HomePage {
   }
 
   ionViewWillLoad () {
-    console.log('home loaded')
+    console.log('home loaded');
   }
   // Signout
   signOut() {
     this.afAuth.auth.signOut();
-      this.navCtrl.setRoot(LoginPage);
       this.toast.create({
         message: `Logged Out`,
         duration: 3000

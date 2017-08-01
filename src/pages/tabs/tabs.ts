@@ -20,7 +20,13 @@ export class TabsPage {
   tab3Root = ContactPage;
 
   constructor(private afAuth:AngularFireAuth, public navCtrl: NavController) {
-
+    
+      afAuth.authState.subscribe(user => {
+        // UI: Display nothing if there is no user
+        if (!user) {        
+          this.navCtrl.setRoot(LoginPage);
+          return;
+      }
+    });
   }
-
 }
