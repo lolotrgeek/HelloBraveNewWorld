@@ -63,8 +63,8 @@ import { Facebook } from '@ionic-native/facebook';
     StatusBar,
     SplashScreen,
     GooglePlus,
-    Facebook
-    //{provide: ErrorHandler, useClass: IonicErrorHandler}
+    Facebook,
+    {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
 export class AppModule {}

@@ -2,21 +2,22 @@ import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { Firebase } from '@ionic-native/firebase'; // native
-import { AngularFireAuth } from 'angularfire2/auth';
+import { Firebase } from '@ionic-native/firebase';
 import { LoginPage } from '../pages/login/login';
-import { TabsPage } from '../pages/tabs/tabs';
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = TabsPage;
+  rootPage:any = LoginPage;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen, private firebase: Firebase, public afAuth: AngularFireAuth) {
-    this.afAuth.authState.subscribe(user => {
-      
-    });
+  constructor(
+    platform: Platform, 
+    statusBar: StatusBar, 
+    splashScreen: SplashScreen, 
+    private firebase: Firebase, 
+  ) {
+    
     platform.ready().then(() => {
       
       // Okay, so the platform is ready and our plugins are available.
@@ -28,7 +29,6 @@ export class MyApp {
       if (platform.is('cordova')) {
 
         console.log ('PLATFORM: Cordova')
-        
         // FIREBASE Native
         this.firebase.getToken()
           .then(token => console.log(`The token is ${token}`)) // save the token server-side and use it to push notifications to this device
@@ -36,11 +36,11 @@ export class MyApp {
 
         this.firebase.onTokenRefresh()
           .subscribe((token: string) => console.log(`Got a new token ${token}`));
-
-        this.firebase.grantPermission()
-
       }
-
+      if (platform.is('ios')) {
+        console.log ('PLATFORM: ios')  
+        this.firebase.grantPermission() // for ios
+      }
       if (platform.is('browser')) {
           console.log ('PLATFORM: Browser')
       }

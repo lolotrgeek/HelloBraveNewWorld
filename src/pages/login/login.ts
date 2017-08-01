@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController, Platform } from 'ionic-angular';
+import { NavController, NavParams, ToastController, AlertController, Platform } from 'ionic-angular';
 import { AngularFireAuth }  from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { User } from '../../models/user';
 import { TabsPage } from '../tabs/tabs';
 //import { RegisterPage } from '../register/register';
 import { GooglePlus } from '@ionic-native/google-plus';
+import { googleplusConfig } from '../../app/app.googleplus.config';
 import { Facebook } from '@ionic-native/facebook';
+
 
 /**
  * Generated class for the LoginPage page.
@@ -14,24 +16,57 @@ import { Facebook } from '@ionic-native/facebook';
  * See http://ionicframework.com/docs/components/#navigation for more info
  * on Ionic pages and navigation.
  */
-@IonicPage()
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.html',
+  templateUrl: 'login.html'
 })
 export class LoginPage {
 
-  // MODEL: user
-  user = {} as User;
+  user = {} as User; // local user model
+  afUser: any = {};  // remote user model
 
-  constructor(public navCtrl: NavController, private toast:ToastController, private platform: Platform, public navParams: NavParams, private afAuth: AngularFireAuth, private googlePlus: GooglePlus, private fb: Facebook) {
-    console.log ('login loaded');
-  
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    public alertCtrl: AlertController, 
+    private toast:ToastController, 
+    private platform: Platform,  
+    private afAuth: AngularFireAuth, 
+    private googlePlus: GooglePlus, 
+    private fb: Facebook
+  ){
+      console.log ('login loaded');
+      this.afAuth.authState.subscribe(afUser => {
+          if(afUser) {
+              alert('fire user logged in');
+              this.afUser = afUser;
+              this.navCtrl.setRoot(TabsPage);
+              return;
+          }else {
+              this.afUser = {};
+              return;
+          }
+      });
   }
 
-  // LOGIN: Model
+  // LOGIN: user model
   async login(user:User) {    
     try {
+      // native user model login
+      if (this.platform.is('cordova')) { 
+
+        const result = firebase.auth().signInWithEmailAndPassword(user.email, user.password);
+        
+        console.log(result);
+
+        if (result) {
+          this.afAuth.authState.subscribe(data => {
+            if (data && data.uid) {
+                this.navCtrl.setRoot(TabsPage)
+            } 
+          });
+        }
+        // Web user model login
+      } else { 
       const result = this.afAuth.auth.signInWithEmailAndPassword(user.email, user.password);
 
       console.log(result);
@@ -44,6 +79,7 @@ export class LoginPage {
           });
         }
       }
+    }
     catch (e) {
       console.error(e);
         this.toast.create({
@@ -54,20 +90,26 @@ export class LoginPage {
     }
   
   //LOGIN: Google
-  async googlelogin() {
-    try {
-      //Native
+googlelogin(): void {
+      // Native google
       if (this.platform.is('cordova')) {
-        const result = this.googlePlus.login({})
-        if (result) {
-          this.navCtrl.setRoot(TabsPage)
-        }
+          this.googlePlus.login(googleplusConfig).then( result => {  
+              firebase.auth().signInWithCredential(firebase.auth.GoogleAuthProvider.credential(result.idToken));
+          }).then( success => {
+            console.log('FIREBASE LOGIN SUCCESS:' + JSON.stringify(success)); // Log success
+
+          }).catch(err => {console.error(err) 
+              this.alertCtrl.create({ // Alert any error
+                title: 'Google Login failed',
+                message: JSON.stringify(err), 
+                buttons: ['Ok']
+              }).present();
+          });
+
       } else {
-      // Web
+      // Web google
         const result = this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-        
-        console.log(result);
-        
+        console.log(result); // Log Result
         if (result) {
           this.afAuth.authState.subscribe(data => {
             if (data && data.uid) {
@@ -77,18 +119,12 @@ export class LoginPage {
         }
       }
     }
-    catch (e) {
-      console.error(e);
-        this.toast.create({
-          message: e.message,
-          duration: 3000
-        }).present();
-    }
-  }
+
+  
   // LOGIN: Facebook
   async facebooklogin() {
     try {
-      // Native
+      // Native facebook
       if (this.platform.is('cordova')) {
         return this.fb.login(['email', 'public_profile']).then(res => {
           const facebookCredential = firebase.auth.FacebookAuthProvider.credential(res.authResponse.accessToken);
@@ -103,7 +139,7 @@ export class LoginPage {
         })
 
       } else {
-      // Web
+      // Web facebook
       const result = this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
       
         console.log(result);

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController, ActionSheetController, ToastController} from 'ionic-angular';
+import { NavController, AlertController, ActionSheetController, ToastController, LoadingController} from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { FirebaseDynamicLinks } from '@ionic-native/firebase-dynamic-links';
@@ -11,20 +11,25 @@ import { LoginPage } from '../login/login';
   templateUrl: 'home.html'
 })
 export class HomePage {
-
-  data;
+  
   displayName;
   items: FirebaseListObservable<any>; 
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, public actionSheetCtrl: ActionSheetController, private toast:ToastController, afDB: AngularFireDatabase, private afAuth: AngularFireAuth, private firebaseDynamicLinks: FirebaseDynamicLinks) {
+  constructor(
+    public navCtrl: NavController, 
+    public alertCtrl: AlertController, 
+    public actionSheetCtrl: ActionSheetController, 
+    private toast:ToastController, 
+    public afDB: AngularFireDatabase, 
+    private afAuth: AngularFireAuth, 
+    private firebaseDynamicLinks: FirebaseDynamicLinks, 
+    public loadingCtrl: LoadingController
+  ) {
 
+    
     afAuth.authState.subscribe(user => {
-      //UI: Display nothing if there is no user
-      if (!user) {        
-        this.data = null;
-        return;
-      }
-      //UI: Display user name
+
+      // UI: Display user name
       if (!user.displayName) {
         this.displayName = null;
         return;
@@ -32,7 +37,8 @@ export class HomePage {
       this.displayName = user.displayName;
             
     });
-    //DB: Construct list from Firebase DB (afDB)
+
+    // DB: Construct list from Firebase DB (afDB)
     this.items = afDB.list('/items');
 
   }
@@ -43,7 +49,7 @@ export class HomePage {
   // Signout
   signOut() {
     this.afAuth.auth.signOut();
-    this.navCtrl.setRoot(LoginPage);
+      this.navCtrl.setRoot(LoginPage);
       this.toast.create({
         message: `Logged Out`,
         duration: 3000
@@ -68,7 +74,7 @@ export class HomePage {
       .catch((error:any) => console.log(error));
   } 
 
-  //DB: Add item
+  // DB: Add item
   addItem() {
     let prompt = this.alertCtrl.create({
       title: 'Item Name',

@@ -9,6 +9,7 @@ import { LoginPage } from '../login/login';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 
+
 @Component({
   templateUrl: 'tabs.html'
 })
@@ -19,12 +20,7 @@ export class TabsPage {
   tab3Root = ContactPage;
 
   constructor(private afAuth:AngularFireAuth, public navCtrl: NavController) {
-    // Show login page if user is not logged in
-    this.afAuth.authState.subscribe(user => {
-      if (!user ) {
-        this.navCtrl.setRoot(LoginPage);
-    }
-  });
+
   }
 
 }
