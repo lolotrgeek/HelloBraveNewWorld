@@ -21,7 +21,6 @@ import { Facebook } from '@ionic-native/facebook';
 export class LoginPage {
 
   user = {} as User; // local user model
-  afUser: any = {};  // remote user model
 
   constructor(
     public navCtrl: NavController, 
@@ -36,12 +35,9 @@ export class LoginPage {
       console.log ('login loaded');
       this.afAuth.authState.subscribe(afUser => {
           if(afUser) {
-              alert('fire user logged in');
-              this.afUser = afUser;
               this.navCtrl.setRoot(TabsPage);
               return;
           }else {
-              this.afUser = {};
               return;
           }
       });
