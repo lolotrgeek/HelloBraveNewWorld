@@ -39,7 +39,7 @@ export class HomePage {
 
   }
 
-  ionViewWillLoad () {
+  ionViewDidLoad () {
     console.log('home loaded');
   }
   // Signout

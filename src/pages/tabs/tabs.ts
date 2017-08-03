@@ -21,7 +21,7 @@ export class TabsPage {
 
   constructor(private afAuth:AngularFireAuth, public navCtrl: NavController) {
     
-      afAuth.authState.subscribe(user => {
+      this.afAuth.authState.subscribe(user => {
         // UI: Display nothing if there is no user
         if (!user) {        
           this.navCtrl.setRoot(LoginPage);
